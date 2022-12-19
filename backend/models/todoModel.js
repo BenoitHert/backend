@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
 const todoSchema = mongoose.Schema({
-    // liste de todo items?
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
     title: {
         type: String,
         required: [true, 'Enter Title'],

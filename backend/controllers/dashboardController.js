@@ -1,12 +1,13 @@
 const asyncHandler = require('express-async-handler')
 
 const Dashboard = require('../models/dashboardModel')
+const User = require('../models/userModel')
 
 // @desc GET dashboard from a user
 // @route GET /
 // @access Private
 const getDashboard = asyncHandler(async (req, res) => {
-    const dashboard = await Dashboard.find()
+    const dashboard = await Dashboard.find({ user: req.user.id })
 
     res.status(200).json(dashboard)
 })
@@ -21,6 +22,7 @@ const setDashboard = asyncHandler( async (req, res) => {
         hasAgenda: req.body.hasAgenda,
         hasTodo: req.body.hasAgenda,
         preferedColor: req.body.preferedColor,
+        user: req.user.id,
     })
 
     res.status(200).json(dashboard)
@@ -35,6 +37,18 @@ const updateDashboard = asyncHandler( async (req, res) => {
     if(!dashboard){
         res.status(400)
         throw new Error('Une erreur est survenue')
+    }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user){
+        res.status(401)
+        throw new Error('Utilisateur introuvable')
+    }
+    // Verify the logged in user matches the dashboard user
+    if(dashboard.user.toString() !== user.id){
+        res.status(401)
+        throw new Error('Non autorisé')
     }
 
     const updatedDashboard = await Dashboard.findByIdAndUpdate(
@@ -54,6 +68,19 @@ const deleteDashboard = asyncHandler( async (req, res) => {
         res.status(400)
         throw new Error('Une erreur est survenue')
     }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user){
+        res.status(401)
+        throw new Error('Utilisateur introuvable')
+    }
+    // Verify the logged in user matches the dashboard user
+    if(dashboard.user.toString() !== user.id){
+        res.status(401)
+        throw new Error('Non autorisé')
+    }
+    
     await dashboard.remove()
     // await Dashboard.findByIdAndRemove(req.params.id)
 

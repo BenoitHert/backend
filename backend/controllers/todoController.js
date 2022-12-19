@@ -1,12 +1,13 @@
 const asyncHandler = require('express-async-handler')
 
 const Todo = require('../models/todoModel')
+const User = require('../models/userModel')
 
 // @desc GET todolist from a user
 // @route GET /api/todo
 // @access Private
 const getTodo = asyncHandler( async (req, res) => {
-    const todoItems = await Todo.find()
+    const todoItems = await Todo.find({ user: req.user.id})
 
     res.status(200).json(todoItems)
 })
@@ -24,6 +25,7 @@ const setTodo = asyncHandler(async (req, res) => {
     const todoItem = await Todo.create({
         title: req.body.title,
         done: req.body.done,
+        user: req.user.id,
     })
 
     res.status(200).json(todoItem)
@@ -39,6 +41,18 @@ const updateTodo = asyncHandler(async (req, res) => {
     if(!todoItem){
         res.status(400)
         throw new Error('Une erreur est survenue')
+    }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user){
+        res.status(401)
+        throw new Error('Utilisateur introuvable')
+    }
+    // Verify the logged in user matches the dashboard user
+    if(todoItem.user.toString() !== user.id){
+        res.status(401)
+        throw new Error('Non autorisé')
     }
 
     const updatedTodoItem = await Todo.findByIdAndUpdate(
@@ -58,6 +72,18 @@ const deleteTodo = asyncHandler( async (req, res) => {
     if(!todoItem){
         res.status(400)
         throw new Error('Une erreur est survenue')
+    }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user){
+        res.status(401)
+        throw new Error('Utilisateur introuvable')
+    }
+    // Verify the logged in user matches the dashboard user
+    if(todoItem.user.toString() !== user.id){
+        res.status(401)
+        throw new Error('Non autorisé')
     }
 
     await todoItem.remove()

@@ -1,7 +1,11 @@
 const mongoose = require('mongoose')
 
 const dashboardSchema = mongoose.Schema({
-    // user
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
     hasMenu: {
         type: Boolean,
         default: false

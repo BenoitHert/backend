@@ -16,14 +16,15 @@ app.use(errorHandler)
 //  ROUTES 
 app.use('/', require('./routes/dashboardRoutes'));
 
-app.use('/api/calendar', require('./routes/calendarRoutes'));
+app.use('/calendar', require('./routes/calendarRoutes'));
 
-app.use('/api/todo', require('./routes/todoRoutes'));
+app.use('/todo', require('./routes/todoRoutes'));
 
-app.use('/api/agenda', require('./routes/agendaRoutes'));
+app.use('/agenda', require('./routes/agendaRoutes'));
 
-app.use('/api/menu', require('./routes/menuRoutes'));
+app.use('/menu', require('./routes/menuRoutes'));
 
+app.use('/users', require('./routes/userRoutes'));
 
 
 

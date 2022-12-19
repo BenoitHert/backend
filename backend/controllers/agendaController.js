@@ -1,12 +1,13 @@
 const asyncHandler = require('express-async-handler')
 
 const Agenda = require('../models/agendaModel')
+const User = require('../models/userModel')
 
 // @desc GET agenda elements from a user
 // @route GET /api/agenda
 // @access Private
 const getAgenda = asyncHandler( async (req, res) => {
-    const agendaItems = await Agenda.find()
+    const agendaItems = await Agenda.find({ user : req.user.id})
 
     res.status(200).json(agendaItems)
 })
@@ -15,20 +16,18 @@ const getAgenda = asyncHandler( async (req, res) => {
 // @route POST /api/agenda
 // @access Private
 const setAgenda = asyncHandler( async (req, res) => {
-    if(!req.body.title){
+    if(!req.body.title || !req.body.date){
         res.status(400)
-        throw new Error('Veuillez ajouter un titre')
+        throw new Error('Veuillez entrer toutes les informations')
     }
-    if(!req.body.date){
-        res.status(400)
-        throw new Error('Veuillez ajouter une date')
-    }
+
     const agendaItem = await Agenda.create({
         title: req.body.title,
         date: req.body.title,
         description: req.body.description,
         color: req.body.color,
         important: req.body.important,
+        user: req.user.id,
     })
 
     res.status(200).json(agendaItem)
@@ -43,6 +42,19 @@ const updateAgenda = asyncHandler( async (req, res) => {
     if(!agendaItem){
         res.status(400)
         throw new Error('Une erreur est survenue')
+    }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if(!user){
+        res.status(401)
+        throw new Error('Utilisateur introuvable')
+    }
+
+    // Verify if the logged in user matches the agenda user
+    if(agendaItem.user.toString() !== user.id){
+        res.status(401)
+        throw new Error('Accès non autorisé')
     }
 
     const updatedAgendaItem = await Agenda.findByIdAndUpdate(
@@ -61,6 +73,19 @@ const deleteAgenda = asyncHandler( async (req, res) => {
     if(!agendaItem) {
         res.status(400)
         throw new Error('Une erreur est survenue')
+    }
+
+    const user = await User.findById(req.user.id)
+    // Check for user
+    if (!user){
+        res.status(401)
+        throw new Error('Utilisateur introuvable')
+    }
+
+    // Verify the user
+    if (agendaItem.user.toString() !== user.id){
+        res.status(401)
+        throw new Error('Accès non autorisé')
     }
 
     await agendaItem.remove()
