@@ -39,14 +39,13 @@ const updateDashboard = asyncHandler( async (req, res) => {
         throw new Error('Une erreur est survenue')
     }
 
-    const user = await User.findById(req.user.id)
     // Check for user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Utilisateur introuvable')
     }
     // Verify the logged in user matches the dashboard user
-    if(dashboard.user.toString() !== user.id){
+    if(dashboard.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('Non autorisé')
     }
@@ -69,14 +68,13 @@ const deleteDashboard = asyncHandler( async (req, res) => {
         throw new Error('Une erreur est survenue')
     }
 
-    const user = await User.findById(req.user.id)
     // Check for user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Utilisateur introuvable')
     }
     // Verify the logged in user matches the dashboard user
-    if(dashboard.user.toString() !== user.id){
+    if(dashboard.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('Non autorisé')
     }

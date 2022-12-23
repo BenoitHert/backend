@@ -9,9 +9,9 @@ const User = require('../models/userModel')
 // @route POST /api/user
 // @access Public
 const registerUser = asyncHandler( async (req, res) => {
-    const {name, email, password, password2 } = req.body
+    const {name, email, password } = req.body
     
-    if(!name || ! email || !password || !password2){
+    if(!name || ! email || !password ){
         res.status(400)
         throw new Error('Veuillez remplir tous les champs')
     }
@@ -22,11 +22,6 @@ const registerUser = asyncHandler( async (req, res) => {
     if(userExists){
         res.status(400)
         throw new Error('Cette adresse email est déjà utilisée')
-    }
-
-    if( password !== password2){
-        res.status(400)
-        throw new Error('Veuillez confirmer correctement votre mot de passe')
     }
 
     // Password hash
@@ -43,9 +38,10 @@ const registerUser = asyncHandler( async (req, res) => {
     if(user){
         res.status(201)
         .json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
+            // only for dev
+            // _id: user._id,
+            // name: user.name,
+            // email: user.email,
             token: generateToken(user._id)
         })
     } else {
@@ -81,13 +77,8 @@ const loginUser = asyncHandler( async (req, res) => {
 // @route GET /api/users/me
 // @access Private
 const getMe = asyncHandler( async (req, res) => {
-    const { _id, name, email } = await User.findById(req.user.id)
 
-    res.status(200).json({
-        id: _id,
-        name,
-        email,
-    })
+    res.status(200).json(req.user)
 
 })
 

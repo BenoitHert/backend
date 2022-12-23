@@ -18,11 +18,11 @@ app.use('/', require('./routes/dashboardRoutes'));
 
 app.use('/calendar', require('./routes/calendarRoutes'));
 
-app.use('/todo', require('./routes/todoRoutes'));
+app.use('/todos', require('./routes/todoRoutes'));
 
 app.use('/agenda', require('./routes/agendaRoutes'));
 
-app.use('/menu', require('./routes/menuRoutes'));
+app.use('/menus', require('./routes/menuRoutes'));
 
 app.use('/users', require('./routes/userRoutes'));
 

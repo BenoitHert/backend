@@ -9,3 +9,9 @@ git commit -m 'initial commit'
 git pull origin master
 
 https://jwt.io
+
+ <!-- To do : reset password page -->
+
+
+ install syncfusion
+ 

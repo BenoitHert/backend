@@ -50,15 +50,14 @@ const updateCalendar = asyncHandler( async (req, res) => {
         throw new Error('Une erreur est survenue')
     }
 
-    const user = await User.findById(req.user.id)
     // Check User
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Utilisateur introuvable')
     }
 
     // Verify User
-    if(calendarItem.user.toString() !== user.id){
+    if(calendarItem.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('Accès non autorisé')
     }
@@ -81,14 +80,13 @@ const deleteCalendar = asyncHandler( async (req, res) => {
         throw new Error('Une erreur est survenue')
     }
 
-    const user = await User.findById( req.user.id)
     // Check the user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('utilisateur introuvable')
     }
     // Verify user access
-    if(calendarItem.user.toString() !== user.id){
+    if(calendarItem.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('Accès non autorisé')
     }

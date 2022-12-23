@@ -42,14 +42,13 @@ const updateMenu =asyncHandler( async (req, res) => {
         throw new Error('Une erreur est survenue')
     }
 
-    const user = await User.findById(req.user.id)
     // Check user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Utilisateur introuvable')
     }
     // Verify user
-    if(menu.user.toString() !== user.id){
+    if(menu.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('Accès non autorisé')
     }
@@ -72,14 +71,13 @@ const deleteMenu = asyncHandler( async (req, res) => {
         throw new Error('Une erreur est servenue')
     }
 
-    const user = await User.findById(req.user.id)
     // Check for user
-    if(!user){
+    if(!req.user){
         res.status(401)
         throw new Error('Utilisateur introuvable')
     }
     // Verify the logged in user matches the dashboard user
-    if(menu.user.toString() !== user.id){
+    if(menu.user.toString() !== req.user.id){
         res.status(401)
         throw new Error('Non autorisé')
     }
