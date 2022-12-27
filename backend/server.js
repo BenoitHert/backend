@@ -26,6 +26,13 @@ app.use('/menus', require('./routes/menuRoutes'));
 
 app.use('/users', require('./routes/userRoutes'));
 
+app.use('/shoplist', require('./routes/shoplistRoutes'));
+
+app.use('/kanban', require('./routes/kanbanRoutes'));
+
+app.use('/users', require('./routes/userRoutes'));
+
+
 
 
 app.listen(port, () => console.log(`Server started on ${port}`))
