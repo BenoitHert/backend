@@ -4,7 +4,7 @@ const Calendar = require('../models/calendarModel')
 const User = require('../models/userModel')
 
 // @desc GET all calendar elements from a user
-// @route GET /api/calendar
+// @route GET /calendar
 // @access Private
 const getCalendar = asyncHandler( async (req, res) => {
     const calendarItems = await Calendar.find({ user: req.user.id})
@@ -13,7 +13,7 @@ const getCalendar = asyncHandler( async (req, res) => {
 })
 
 // @desc Create a  calendar element for a user
-// @route POST /api/calendar
+// @route POST /calendar
 // @access Private
 const setCalendar = asyncHandler( async (req, res) => {
     if(!req.body.title || !req.body.startingDate || !req.body.endingDate) {
@@ -40,7 +40,7 @@ const setCalendar = asyncHandler( async (req, res) => {
 })
 
 // @desc Update calendar elements from a user
-// @route PUT /api/calendar/:id
+// @route PUT /calendar/:id
 // @access Private
 const updateCalendar = asyncHandler( async (req, res) => {
     const calendarItem = await Calendar.findById(req.params.id)
@@ -70,7 +70,7 @@ const updateCalendar = asyncHandler( async (req, res) => {
 })
 
 // @desc Delete calendar elements from a user
-// @route DELETE /api/calendar/:id
+// @route DELETE /calendar/:id
 // @access Private
 const deleteCalendar = asyncHandler( async (req, res) => {
     const calendarItem = await Calendar.findById(req.params.id)

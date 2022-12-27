@@ -4,7 +4,7 @@ const Todo = require('../models/todoModel')
 const User = require('../models/userModel')
 
 // @desc GET todolist from a user
-// @route GET /api/todo
+// @route GET /todo
 // @access Private
 const getTodo = asyncHandler( async (req, res) => {
     const todoItems = await Todo.find({ user: req.user.id})
@@ -14,7 +14,7 @@ const getTodo = asyncHandler( async (req, res) => {
 
 
 // @desc Create a todo item in a todolist for a user
-// @route POST /api/todo
+// @route POST /todo
 // @access Private
 const setTodo = asyncHandler(async (req, res) => {
     if(!req.body.title){
@@ -33,7 +33,7 @@ const setTodo = asyncHandler(async (req, res) => {
 
 
 // @desc Update a todo item in a todolist for a user
-// @route GET /api/todo/:id
+// @route GET /todo/:id
 // @access Private
 const updateTodo = asyncHandler(async (req, res) => {
     const todoItem = await Todo.findById(req.params.id)
@@ -63,7 +63,7 @@ const updateTodo = asyncHandler(async (req, res) => {
 
 
 // @desc Delete a todo item in a todolist for a user
-// @route DELETE /api/agenda/:id
+// @route DELETE /agenda/:id
 // @access Private
 const deleteTodo = asyncHandler( async (req, res) => {
     const todoItem = await Todo.findById(req.params.id)

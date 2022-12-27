@@ -53,7 +53,7 @@ function Todo() {
               <TodoItem key={todo._id} todo={todo} />
             ))}
           </div>
-        ) : (<h3>Vous n'vez rien à faire !</h3>)}
+        ) : (<h3>Vous n'avez rien à faire !</h3>)}
       </section>
       
       

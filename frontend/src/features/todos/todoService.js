@@ -28,6 +28,19 @@ const getTodos = async(token) => {
     return response.data
 }
 
+// update a todo item
+const updateTodo = async(todoId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(API_URL + todoId, config)
+
+    return response.data
+}
+
 // delete todoItem from a user
 const deleteTodo = async(todoId, token) => {
     const config = {
@@ -45,7 +58,8 @@ const deleteTodo = async(todoId, token) => {
 const todoService = {
     createTodo,
     getTodos,
-    deleteTodo
+    deleteTodo,
+    updateTodo
 }
 
 export default todoService
