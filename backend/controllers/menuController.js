@@ -4,7 +4,7 @@ const Menu = require('../models/menuModel')
 const User = require('../models/userModel')
 
 // @desc Get all menu elements from a user
-// @route GET /api/menu
+// @route GET /menu
 // @access Private
 const getMenu = asyncHandler( async (req, res) => {
     const menuItems = await Menu.find({ user: req.user.id})
@@ -13,7 +13,7 @@ const getMenu = asyncHandler( async (req, res) => {
 })
 
 // @desc Create a menu element for a user
-// @route POST /api/menu
+// @route POST /menu
 // @access Private
 const setMenu =asyncHandler( async (req, res) => {
     if(!req.body.firstDish || !req.body.secondDish || !req.body.thirdDish){
@@ -32,7 +32,7 @@ const setMenu =asyncHandler( async (req, res) => {
 })
 
 // @desc Update a menu element for a user
-// @route PUT /api/menu/:id
+// @route PUT /menu/:id
 // @access Private
 const updateMenu =asyncHandler( async (req, res) => {
     const menu = await Menu.findById(req.params.id)
@@ -61,7 +61,7 @@ const updateMenu =asyncHandler( async (req, res) => {
 })
 
 // @desc Delete a menu element for a user
-// @route DELETE /api/menu/:id
+// @route DELETE /menu/:id
 // @access Private
 const deleteMenu = asyncHandler( async (req, res) => {
     const menu = await Menu.findById(req.params.id)

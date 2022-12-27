@@ -1,119 +1,123 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import todoService from './todoService'
-
+import agendaService from './agendaService'
 
 const initialState = {
-    todos: [],
+    events: [],
+    isLoading: false,
     isError: false,
     isSuccess: false,
-    isLoading: false,
-    message:'',
+    message: '',
 }
 
-// Create new Todo
-export const createTodo = createAsyncThunk('todos/create', async(todoData, thunkAPI) => {
+// create agenda
+const createAgenda = createAsyncThunk('agenda/create', async(agendaData, thunkAPI) => {
     try {
         // Get the users's token
         const token = thunkAPI.getState().auth.user.token
-        return await todoService.createTodo(todoData, token)
+        return await agendaService.createAgenda(agendaData, token)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message ) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
 })
 
-// get user Todos
-export const getTodos = createAsyncThunk('todos/getAll', async(_, thunkAPI) => {
+// get agenda
+const getAgenda = createAsyncThunk('agenda/getAll', async(_, thunkAPI) => {
     try {
         // Get the users's token
         const token = thunkAPI.getState().auth.user.token
-        return await todoService.getTodos(token)
+        return await agendaService.getAgenda(token)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message ) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
 })
 
-// update user to do
-export const updateTodo = createAsyncThunk('todos/update', async(id, thunkAPI) => {
+// update agenda
+const updateAgenda = createAsyncThunk('agenda/delete', async(id, thunkAPI) => {
     try {
         // Get the users's token
         const token = thunkAPI.getState().auth.user.token
-        return await todoService.updateTodos(id, token)
+        return await agendaService.updateAgenda(id, token)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message ) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
 })
 
-// delete todo Item from a user
-export const deleteTodo = createAsyncThunk('todos/delete', async(id, thunkAPI) => {
+// delete agenda
+const deleteAgenda = createAsyncThunk('agenda/delete', async(id, thunkAPI) => {
     try {
         // Get the users's token
         const token = thunkAPI.getState().auth.user.token
-        return await todoService.deleteTodo(id, token)
+        return await agendaService.deleteAgenda(id, token)
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message ) || error.message || error.toString()
         return thunkAPI.rejectWithValue(message)
     }
 })
 
-export const todoSlice = createSlice({
-    name: 'todo',
+
+export const agendaSlice = createSlice({
+    name: 'agenda',
     initialState,
     reducer: {
-        reset: (state) => initialState
+        reset : (state) => initialState
     },
-    extraReducers: (builder) => {
+    extraReducer : (builder) => {
         builder
-        .addCase(createTodo.pending, (state) => {
+        // CREATE
+        .addCase(createAgenda.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(createTodo.fulfilled, (state, action) => {
+        .addCase(createAgenda.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.todos.push(action.payload)
+            state.message = action.payload
         })
-        .addCase(createTodo.rejected, (state, action) => {
+        .addCase(createAgenda.rejected, (state, action) => {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
-        })
-        .addCase(getTodos.pending, (state) => {
+        })        
+        // GET
+        .addCase(getAgenda.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(getTodos.fulfilled, (state, action) => {
+        .addCase(getAgenda.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.todos = action.payload
+            state.message = action.payload
         })
-        .addCase(getTodos.rejected, (state, action) => {
+        .addCase(getAgenda.rejected, (state, action) => {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
-        })
-        .addCase(deleteTodo.pending, (state) => {
+        })        
+        // UPDATE
+        .addCase(createAgenda.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(deleteTodo.fulfilled, (state, action) => {
+        .addCase(updateAgenda.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.todos = state.todos.filter((todo) => todo._id !== action.payload.id)
+            state.message = action.payload
         })
-        .addCase(deleteTodo.rejected, (state, action) => {
+        .addCase(updateAgenda.rejected, (state, action) => {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
-        })
-        .addCase(updateTodo.pending, (state) => {
+        })        
+        // DELETE
+        .addCase(deleteAgenda.pending, (state) => {
             state.isLoading = true
         })
-        .addCase(updateTodo.fulfilled, (state, action) => {
+        .addCase(deleteAgenda.fulfilled, (state, action) => {
             state.isLoading = false
             state.isSuccess = true
-            state.message = action.payload
+            state.events = state.events.filter((event) => event._id !== action.payload.id)
         })
-        .addCase(updateTodo.rejected, (state, action) => {
+        .addCase(deleteAgenda.rejected, (state, action) => {
             state.isLoading = false
             state.isError = true
             state.message = action.payload
@@ -121,11 +125,6 @@ export const todoSlice = createSlice({
     }
 })
 
-export const {reset} = todoSlice.actions
+export const {reset} = agendaSlice.actions
 
-export default todoSlice.reducer
-
-
-
-
-
+export default agendaSlice.reducer

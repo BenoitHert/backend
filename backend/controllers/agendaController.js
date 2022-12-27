@@ -4,7 +4,7 @@ const Agenda = require('../models/agendaModel')
 const User = require('../models/userModel')
 
 // @desc GET agenda elements from a user
-// @route GET /api/agenda
+// @route GET agenda
 // @access Private
 const getAgenda = asyncHandler( async (req, res) => {
     const agendaItems = await Agenda.find({ user : req.user.id})
@@ -13,7 +13,7 @@ const getAgenda = asyncHandler( async (req, res) => {
 })
 
 // @desc Create agenda elements from a user
-// @route POST /api/agenda
+// @route POST /agenda
 // @access Private
 const setAgenda = asyncHandler( async (req, res) => {
     if(!req.body.title || !req.body.date){
@@ -34,7 +34,7 @@ const setAgenda = asyncHandler( async (req, res) => {
 })
 
 // @desc Update agenda elements from a user
-// @route PUT /api/agenda/:id
+// @route PUT /agenda/:id
 // @access Private
 const updateAgenda = asyncHandler( async (req, res) => {
     const agendaItem = await Agenda.findById(req.params.id)

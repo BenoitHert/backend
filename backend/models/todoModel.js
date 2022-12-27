@@ -8,7 +8,7 @@ const todoSchema = mongoose.Schema({
     },
     title: {
         type: String,
-        required: [true, 'Enter Title'],
+        required: [true, 'Entrez un titre'],
     },
     done: {
         type: Boolean,
